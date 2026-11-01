@@ -175,6 +175,7 @@ sudo mariadb -e "SELECT COUNT(*) FROM mysql.time_zone_name;"
 ```
 
 La commande `mysql_tzinfo_to_sql` n'existe plus par défaut avec MariaDB récent : le paquet `mariadb-client-compat` la remet, et `mariadb-tzinfo-to-sql` fait la même chose. Le `COUNT(*)` doit être supérieur à 0 (486 dans ce lab).
+<img width="1211" height="680" alt="Capture d&#39;écran 2026-10-28 185745" src="https://github.com/user-attachments/assets/0b6a29b6-ec08-485e-a965-bbfdec737cbf" />
 
 ### 4.5 Déploiement de GLPI
 
@@ -190,6 +191,7 @@ ls /var/www/glpi
 ```
 
 L'URL de l'archive est obtenue par l'API GitHub, ce qui évite de copier un lien à la main. Le dernier `ls` doit afficher notamment les dossiers `public`, `src` et `config`.
+<img width="1100" height="599" alt="Capture d&#39;écran 2026-10-28 190026" src="https://github.com/user-attachments/assets/6cd3b462-278e-4533-b71f-800c65a2b9b6" />
 
 ### 4.6 Virtual host Apache
 
@@ -237,7 +239,8 @@ Dans un navigateur : `http://localhost`.
 5. Choix de la base existante `glpi`
 6. Initialisation des tables, puis affichage des comptes par défaut
 
-![Assistant d'installation](docs/images/01-installation-glpi.png)
+<img width="1190" height="722" alt="Capture d&#39;écran 2026-10-28 190602" src="https://github.com/user-attachments/assets/233862df-423f-4b16-9b2f-b73af3cf7693" />
+
 
 ### 4.8 Sécurisation après installation
 
@@ -248,6 +251,7 @@ Dans un navigateur : `http://localhost`.
 Les identifiants `glpi_user` (base de données) et `glpi` (compte GLPI) sont deux choses différentes : le premier n'ouvre pas l'interface web.
 
 ---
+<img width="1153" height="607" alt="Capture d&#39;écran 2026-10-28 190957" src="https://github.com/user-attachments/assets/794fbf01-8577-4f90-93dc-f2f1e4eaa30b" />
 
 ## 5. Phase 2 : Configuration du support
 
@@ -263,6 +267,7 @@ Un **profil** est un ensemble de droits. Un utilisateur reçoit une ou plusieurs
 | Self-Service | Demandeur : crée et suit ses propres tickets (interface simplifiée) |
 
 La liste se trouve dans *Administration > Profils*. Un utilisateur peut avoir plusieurs profils et changer de profil actif depuis le menu en haut à droite.
+<img width="1116" height="613" alt="Capture d&#39;écran 2026-10-28 192402" src="https://github.com/user-attachments/assets/cc93a5eb-6812-4639-aa9a-7ddff9880153" />
 
 ### 5.2 Catégories ITIL
 
@@ -276,7 +281,8 @@ La liste se trouve dans *Administration > Profils*. Un utilisateur peut avoir pl
 
 Pour chaque catégorie : visible pour les **incidents** et les **demandes**, et dans l'**interface simplifiée**, sinon un demandeur ne la voit pas dans son formulaire. Une sous-catégorie se rattache à son parent via le champ *Comme enfant de* ; la liste doit afficher des noms complets de la forme `Poste de travail > Matériel`, sur deux niveaux au maximum.
 
-![Catégories ITIL](docs/images/02-categories-itil.png)
+<img width="1219" height="750" alt="Capture d&#39;écran 2026-10-31 124025" src="https://github.com/user-attachments/assets/070f95e7-a201-4b4e-b5aa-3ca3b6168561" />
+
 
 ### 5.3 SLA
 
@@ -301,7 +307,8 @@ Un SLA de type *prise en compte* (délai avant le premier traitement) peut s'ajo
 
 La **priorité** est calculée par GLPI à partir de l'urgence et de l'impact.
 
-![Ticket résolu](docs/images/03-ticket-resolu.png)
+<img width="1761" height="725" alt="Capture d&#39;écran 2026-10-28 205019" src="https://github.com/user-attachments/assets/805582b4-f62e-4f09-b0b8-41690d5236fe" />
+
 
 ---
 
@@ -369,6 +376,7 @@ Le client ne doit avoir que le DC (`192.168.30.14`) comme serveur DNS : un DNS p
 - Un **compte de service** `svc-glpi`, en lecture seule (un simple membre des *Utilisateurs du domaine* suffit pour lire l'annuaire), avec un mot de passe qui n'expire pas
 - Des utilisateurs de test : `hybride01`, `hybride02`, `hybride03` (synchronisés vers Entra ID par Entra Connect)
 - Facultatif : une OU dédiée et des groupes par rôle, qui serviront à attribuer les profils automatiquement
+<img width="1033" height="677" alt="Capture d&#39;écran 2026-10-28 211741" src="https://github.com/user-attachments/assets/b2a69745-6b6e-4a61-8387-0f938c2acace" />
 
 ### 7.2 Test depuis la VM, avant de toucher à GLPI
 
@@ -378,6 +386,7 @@ nc -zv 192.168.30.14 389
 ldapsearch -x -H ldap://192.168.30.14 -D "svc-glpi@kpevika.lab" -W \
   -b "DC=kpevika,DC=lab" "(sAMAccountName=svc-glpi)" dn
 ```
+<img width="1235" height="629" alt="Capture d&#39;écran 2026-10-28 212128" src="https://github.com/user-attachments/assets/c1038a28-81c5-4fc9-8c01-1df9d4a446ba" />
 
 Un résultat avec une ligne `dn:` prouve que le port est ouvert, que le compte de service s'authentifie et que le BaseDN est correct.
 
@@ -399,7 +408,8 @@ Le filtre sélectionne les comptes utilisateurs (`objectClass=user` et `objectCa
 
 Le bouton **Tester** déroule cinq contrôles : flux TCP, Base DN, URI LDAP, connexion (bind) et recherche. Dans ce lab, la recherche a renvoyé 6 entrées.
 
-![Test LDAP](docs/images/05-test-ldap.png)
+<img width="1059" height="532" alt="Capture d&#39;écran 2026-10-28 213646" src="https://github.com/user-attachments/assets/d2ab3599-8b04-42d7-a6c9-43094b103c01" />
+
 
 ### 7.4 Import des utilisateurs
 
@@ -452,7 +462,8 @@ En cas d'`Invalid credentials`, le code `data` du message donne la cause :
 | `773` | Changement de mot de passe obligatoire à la prochaine connexion |
 | `775` | Compte verrouillé |
 
-![Utilisateurs importés](docs/images/06-utilisateurs-ldap.png)
+<img width="1612" height="601" alt="Capture d&#39;écran 2026-10-28 234356" src="https://github.com/user-attachments/assets/c1d137e1-7873-4954-8559-412693cf4fd0" />
+
 
 ---
 
@@ -508,7 +519,8 @@ sudo tail -n 20 /var/log/apache2/access.log     # chercher POST /front/inventory
 
 Les journaux de l'agent se trouvent dans `C:\Program Files\GLPI-Agent\logs`. Des avertissements Perl du module Firewall (`Use of uninitialized value $category`) peuvent s'afficher : ils sont sans gravité et ne bloquent pas l'inventaire.
 
-![Poste inventorié](docs/images/07-poste-inventorie.png)
+<img width="1270" height="640" alt="Capture d&#39;écran 2026-10-29 112857" src="https://github.com/user-attachments/assets/b4ad63d6-71d7-48e9-8c8a-6f91f234a8b2" />
+
 
 ---
 
@@ -577,7 +589,9 @@ Journaux sur le client, dans `C:\Windows\CCM\Logs` :
 | `AppEnforce.log` | Lancement de l'installation et code de retour |
 | `execmgr.log` | Exécution des déploiements |
 
-![Déploiement SCCM](docs/images/08-deploiement-sccm.png)
+<img width="1015" height="504" alt="Capture d&#39;écran 2026-10-29 122423" src="https://github.com/user-attachments/assets/25d4fd44-e25c-42b4-a96b-b2437b1d28c4" />
+
+<img width="1014" height="573" alt="Capture d&#39;écran 2026-10-29 122626" src="https://github.com/user-attachments/assets/49cad2ba-be1b-44aa-bd3f-c3482577dacc" />
 
 ---
 
@@ -640,9 +654,11 @@ Un groupe de sécurité Entra `GLPI-Agent-Intune-Test`, avec `PCTEST2` comme **a
 - Journal en cas de problème : `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\IntuneManagementExtension.log`
 - GLPI : `PCTEST2` apparaît dans *Parc > Ordinateurs* avec l'étiquette `kpevika-intune`
 
-![Déploiement Intune](docs/images/09-deploiement-intune.png)
+<img width="1007" height="651" alt="Capture d&#39;écran 2026-10-29 131100" src="https://github.com/user-attachments/assets/0e8f6e1a-0d3c-4860-8737-d92918e28722" />
 
-![Parc GLPI avec les deux postes](docs/images/10-parc-glpi.png)
+
+<img width="1201" height="478" alt="Capture d&#39;écran 2026-10-29 170038" src="https://github.com/user-attachments/assets/85393b99-7a13-4cdb-8238-2f029d026bf2" />
+
 
 ---
 
